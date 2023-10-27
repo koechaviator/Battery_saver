@@ -6,7 +6,10 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Alert,
   Text,
+  Button,
+  TouchableOpacity,
   View,
   Image
 } from 'react-native';
@@ -27,14 +30,21 @@ function App(): JSX.Element {
           <View style={styles.header}>
             <Text style={styles.title}>Battery Saver</Text>
           </View>
-          <View style={styles.sectionDisplayBatter}>
+          <View style={styles.sectionDisplayBattery}>
             <Image 
               source={require('./images/low_battery.png')}
-              style={{width: 300, height: 300}}
+              style={{width: 300, height: 250}}
             />
-            <Text>Hell</Text>
-            <Icon name="facebook" size={30} color="#900" />
+            {/* <Icon name="battery-0" size={30} color="#900" /> */}
+            <Text style={styles.percentage}>3%</Text>
+            <Text  style={styles.percentageAbout}>About 22m left</Text>
           </View>
+        </View>
+        <View>
+          <Button onPress={()=>Alert.alert('Hello')} title="This looks great!" />
+          <TouchableOpacity onPress={()=>Alert.alert('Hello')} style={styles.button}>
+            <Text>Click me</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -44,31 +54,41 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   sectionFirst: {
-    backgroundColor:"#f5fbfc"
+    backgroundColor:"#ffff"
   },
   header:{
     paddingVertical: 10,
     paddingHorizontal:10,
+    backgroundColor:"#f5fbfc"
   },
   title: {
     fontSize: 24,
     color:'black',
     fontWeight: '600',
   },
-  sectionDisplayBatter:{
+  sectionDisplayBattery:{
+    flex:1,
+    alignItems:'center',
     marginHorizontal:15,
     marginVertical:20,
     paddingVertical: 10,
     paddingHorizontal:10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  percentage: {
+    color:'#2ebfd9',
+    fontWeight: '600',
+    fontSize:50,
   },
-  highlight: {
-    fontWeight: '700',
+  percentageAbout:{
+    fontSize:15,
   },
+  button:{
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center',
+    height:40,
+    backgroundColor:'#aedfe8'
+  }
 });
 
 export default App;
