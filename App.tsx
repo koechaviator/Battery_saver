@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image
 } from 'react-native';
 
 type SectionProps = PropsWithChildren<{
@@ -27,8 +28,12 @@ function App(): JSX.Element {
             <Text style={styles.title}>Battery Saver</Text>
           </View>
           <View style={styles.sectionDisplayBatter}>
+            <Image 
+              source={require('./images/low_battery.png')}
+              style={{width: 300, height: 300}}
+            />
             <Text>Hell</Text>
-            <Icon name="key" size={30} color="#900" />
+            <Icon name="facebook" size={30} color="#900" />
           </View>
         </View>
       </ScrollView>
