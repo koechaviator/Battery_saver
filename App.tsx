@@ -1,5 +1,6 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   SafeAreaView,
   ScrollView,
@@ -21,11 +22,14 @@ function App(): JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         >
-        <View style={styles.header}>
-          <Text style={styles.title}>Battery Saver</Text>
-        </View>
-        <View style={styles.sectionDisplayBatter}>
-          <Text>Hello</Text>
+        <View style={styles.sectionFirst}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Battery Saver</Text>
+          </View>
+          <View style={styles.sectionDisplayBatter}>
+            <Text>Hell</Text>
+            <Icon name="key" size={30} color="#900" />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -34,9 +38,8 @@ function App(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  sectionFirst: {
+    backgroundColor:"#f5fbfc"
   },
   header:{
     paddingVertical: 10,
