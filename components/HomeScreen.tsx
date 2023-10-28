@@ -19,7 +19,7 @@ type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function HomeScreen(): JSX.Element {
+function HomeScreen({navigation}:any): JSX.Element {
   const [id,setId]=useState('')
   getManufacturer().then((id)=>{
     setId(id)
@@ -35,15 +35,16 @@ function HomeScreen(): JSX.Element {
           <View style={styles.sectionDisplayBattery}>
             <Image 
               source={require('../images/low_battery.png')}
-              style={{width: 300, height: 150}}
+              style={{width: 300, height: 200}}
             />
             {/* <Icon name="battery-0" size={30} color="#900" /> */}
             <Text style={styles.percentage}>3%</Text>
             <Text  style={styles.percentageAbout}>About 22m left {id}</Text>
           </View>
         </View>
+
         <View>
-          <Button onPress={()=>Alert.alert('Hello')} title="This looks great!" />
+          <Button onPress={()=> navigation.navigate('Device info')} title="Device information" />
           <TouchableOpacity onPress={()=>Alert.alert('Hello')} style={styles.button}>
             <Text>Click me</Text>
           </TouchableOpacity>
@@ -56,7 +57,7 @@ function HomeScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   sectionFirst: {
-    backgroundColor:"black"
+    backgroundColor:"white"
   },
   sectionDisplayBattery:{
     flex:1,
