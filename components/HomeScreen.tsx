@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getUniqueId, getManufacturer } from 'react-native-device-info';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import ScreenBrightness from 'react-native-screen-brightness';
+import { getUniqueId, getManufacturer, getBatteryLevel } from 'react-native-device-info';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,7 +15,8 @@ import {
   Button,
   TouchableOpacity,
   View,
-  Image
+  Image,
+  Switch
 } from 'react-native';
 
 type SectionProps = PropsWithChildren<{
@@ -20,33 +24,124 @@ type SectionProps = PropsWithChildren<{
 }>;
 
 function HomeScreen({navigation}:any): JSX.Element {
-  const [id,setId]=useState('')
-  getManufacturer().then((id)=>{
-    setId(id)
+  const [manufacturer,setManufacturer]=useState('')
+  const [batteryLevel,setBatteryLevel]=useState(0)
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [brightness,setBrightness]=useState()
+
+  getManufacturer().then((manufacturer)=>{
+    setManufacturer(manufacturer)
   })
+  getBatteryLevel().then((battery)=>{
+    setBatteryLevel(battery)
+  })
+  // ScreenBrightness.setBrightness(0.5); // between 0 and 1
+ 
+  ScreenBrightness.getBrightness().then((brightness:any) => {
+    setBrightness(brightness);
+  }).catch(()=>{
+    Alert.alert("Unable to set system brightness")
+  });
+
+  const toggleSwitch = () =>{
+    setIsEnabled(previousState => !previousState);
+    Alert.alert("Successfully turned on battery saver")
+    console.log(isEnabled)
+    if(isEnabled!==true){
+    }
+  };
+
   return (
     <>
     {/* <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#00BCD4" translucent = {true}/> */}
-    <SafeAreaView >
+    <SafeAreaView style={{backgroundColor:'white'}}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         >
         <View style={styles.sectionFirst}>
           <View style={styles.sectionDisplayBattery}>
             <Image 
-              source={require('../images/low_battery.png')}
+              source={require("../images/low_battery.png")}
               style={{width: 300, height: 200}}
             />
             {/* <Icon name="battery-0" size={30} color="#900" /> */}
-            <Text style={styles.percentage}>3%</Text>
-            <Text  style={styles.percentageAbout}>About 22m left {id}</Text>
+            <Text style={styles.percentage}>{batteryLevel}%</Text>
+            <Text  style={styles.percentageAbout}>About 22m left {manufacturer} {brightness}</Text>
           </View>
         </View>
 
-        <View>
-          <Button onPress={()=> navigation.navigate('Device info')} title="Device information" />
+        {/* <View>
+          <Button  title="Device information" />
           <TouchableOpacity onPress={()=>Alert.alert('Hello')} style={styles.button}>
             <Text>Click me</Text>
+          </TouchableOpacity>
+        </View> */}
+
+        <View style={{marginVertical:20}}>
+          <TouchableOpacity style={styles.button}>
+            <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+              <View  style={{ padding:20,}}>
+                <Icon name="bolt" size={30} color="#fcba03"/>
+              </View>
+              <View style={{flexGrow:1,}}>
+                <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Battery saver</Text>
+                <Text style={{fontSize:15,}}>22m remaining</Text>
+              </View>
+            </View>
+            <Switch
+              // trackColor={{false: '#dee2e3', true: '#767577'}}
+              thumbColor={isEnabled ? '#55a36c' : '#f4f3f4'}
+              onValueChange = {toggleSwitch}
+              value={isEnabled}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Battery info')}>
+            <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+              <View  style={{ padding:15,}}>
+                <Entypo name="battery" size={28} color="#31a5d4"/>
+              </View>
+              <View style={{flexGrow:1,}}>
+                <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Battery information</Text>
+                <Text style={{fontSize:15,}}>Status, Charging and quality</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Battery info')}>
+            <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+              <View  style={{ padding:15,}}>
+                <Feather name="sun" size={28} color="#fcba03"/>
+              </View>
+              <View style={{flexGrow:1,}}>
+                <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Display</Text>
+                <Text style={{fontSize:15,}}>Screen brightness, font size</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Battery info')}>
+            <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+              <View  style={{ padding:15,}}>
+                <Entypo name="battery" size={28} color="#31a5d4"/>
+              </View>
+              <View style={{flexGrow:1,}}>
+                <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Battery information</Text>
+                <Text style={{fontSize:15,}}>Status, Charging and quality</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Battery info')}>
+            <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+              <View  style={{ padding:15,}}>
+                <Feather name="info" size={28} color="#55a36c"/>
+              </View>
+              <View style={{flexGrow:1,}}>
+                <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Tips</Text>
+                <Text style={{fontSize:15,}}>How to improve your battery life</Text>
+              </View>
+            </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -63,6 +158,7 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:'center',
     marginHorizontal:15,
+    flexDirection:'column',
     // marginVertical:20,
     paddingVertical: 10,
     paddingHorizontal:10,
@@ -77,10 +173,10 @@ const styles = StyleSheet.create({
   },
   button:{
     flex:1,
+    height:73,
+    flexDirection:'row',
     alignItems:'center',
-    justifyContent:'center',
-    height:40,
-    backgroundColor:'#aedfe8'
+    justifyContent:"space-between",
   }
 });
 

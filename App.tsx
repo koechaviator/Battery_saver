@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/HomeScreen';
-import DeviceInfo from './components/DeviceInfo';
+import BatteryInfo from './components/BatteryInfo';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,10 +25,10 @@ export default function App() {
           }}
         />
         <Stack.Screen 
-          name="Device info" 
-          component={DeviceInfo}
+          name="Battery info" 
+          component={BatteryInfo}
           options={{
-            title: 'Device info',
+            title: 'Battery information',
             headerStyle: {
               backgroundColor: '#55a36c',
             },
