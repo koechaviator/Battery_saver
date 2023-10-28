@@ -32,13 +32,10 @@ function HomeScreen(): JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         >
         <View style={styles.sectionFirst}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Battery Saver</Text>
-          </View>
           <View style={styles.sectionDisplayBattery}>
             <Image 
               source={require('../images/low_battery.png')}
-              style={{width: 300, height: 250}}
+              style={{width: 300, height: 150}}
             />
             {/* <Icon name="battery-0" size={30} color="#900" /> */}
             <Text style={styles.percentage}>3%</Text>
@@ -59,23 +56,13 @@ function HomeScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   sectionFirst: {
-    backgroundColor:"#ffff"
-  },
-  header:{
-    paddingVertical: 10,
-    paddingHorizontal:10,
-    backgroundColor:"#f5fbfc"
-  },
-  title: {
-    fontSize: 24,
-    color:'black',
-    fontWeight: '600',
+    backgroundColor:"black"
   },
   sectionDisplayBattery:{
     flex:1,
     alignItems:'center',
     marginHorizontal:15,
-    marginVertical:20,
+    // marginVertical:20,
     paddingVertical: 10,
     paddingHorizontal:10,
   },
