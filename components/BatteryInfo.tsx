@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
-import { getUniqueId, getDisplay, getPowerState, isAirplaneMode, getManufacturer, getBatteryLevel } from 'react-native-device-info';
+import { getPowerState,  getBrightness, getBatteryLevel } from 'react-native-device-info';
 import React, { useState } from 'react'
 
 export default function BatteryInfo() {
@@ -14,8 +14,8 @@ export default function BatteryInfo() {
     console.log("Unable to set system brightness")
   });
   return (
-   <SafeAreaView>
-    <ScrollView style={{backgroundColor:"white", paddingHorizontal:20}}>
+   <SafeAreaView style={{backgroundColor:"white", paddingHorizontal:20, height:1000}}>
+    <ScrollView >
       <View style={{paddingBottom:20}}>
         <View style={styles.button}>
           <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
@@ -38,62 +38,8 @@ export default function BatteryInfo() {
         <View style={styles.button}>
           <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
             <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.button}>
-          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
-            <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
+              <Text style={{fontSize:18,color:'black'}}>Duration</Text>
+              <Text style={{fontSize:15,}}>22m</Text>
             </View>
           </View>
         </View>

@@ -3,9 +3,10 @@ import type {PropsWithChildren} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import ScreenBrightness from 'react-native-screen-brightness';
-import { getUniqueId, getDisplay, getPowerState, isAirplaneMode, getManufacturer, getBatteryLevel } from 'react-native-device-info';
+import { getUniqueId, getBrightness, getDisplay, getPowerState, isAirplaneMode, getManufacturer, getBatteryLevel } from 'react-native-device-info';
 import {
   SafeAreaView,
   ScrollView,
@@ -14,6 +15,8 @@ import {
   Alert,
   Text,
   Button,
+  Pressable,
+  Modal,
   TouchableOpacity,
   View,
   Image,
@@ -30,12 +33,17 @@ function HomeScreen({navigation}:any): JSX.Element {
   const [isEnabled, setIsEnabled] = useState(false);
   const [brightness,setBrightness]=useState()
   const [checkAirplaneMode,setAirplaneMode]=useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [getBright,setGetBright]=useState(0)
 
   getManufacturer().then((manufacturer)=>{
     setManufacturer(manufacturer)
   })
   getBatteryLevel().then((battery)=>{
     setBatteryLevel(battery)
+  })
+  getBrightness().then((battery)=>{
+    setGetBright(battery)
   })
   // ScreenBrightness.setBrightness(0.5); // between 0 and 1
  
@@ -115,14 +123,35 @@ function HomeScreen({navigation}:any): JSX.Element {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Battery info')}>
+          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onShow={()=>{
+
+              }}
+              onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Pressable style={{marginLeft:'auto'}} onPress={() => setModalVisible(!modalVisible)}>
+                    <FontAwesome name="times" size={23} color="black"/>
+                  </Pressable>
+                  <Text style={{color:"black",fontSize:18}}>Brightness</Text>
+                  <Text style={{fontSize:15, marginTop:7}}>{brightness}% {getBright}%</Text>
+                </View>
+              </View>
+            </Modal>
             <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
               <View  style={{ padding:15,}}>
                 <Feather name="sun" size={28} color="#fcba03"/>
               </View>
               <View style={{flexGrow:1,}}>
                 <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Display</Text>
-                <Text style={{fontSize:15,}}>Screen brightness, font size</Text>
+                <Text style={{fontSize:15,}}>Screen brightness</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -184,7 +213,38 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:"space-between",
-  }
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    // alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 });
 
 export default HomeScreen;
