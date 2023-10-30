@@ -82,10 +82,17 @@ function HomeScreen({navigation}:any): JSX.Element {
         >
         <View style={styles.sectionFirst}>
           <View style={styles.sectionDisplayBattery}>
-            <Image 
+            {batteryLevel<40?(
+              <Image 
               source={require("../images/low_battery.png")}
               style={{width: 300, height: 200}}
-            />
+            />)
+            :
+            (
+              <Image 
+              source={require("../images/full_battery.png")}
+              style={{width: 300, height: 200}}
+            />)}
             {/* <Icon name="battery-0" size={30} color="#900" /> */}
             <Text style={styles.percentage}>{batteryLevel}%</Text>
             <Text  style={styles.percentageAbout}>About 22m left {manufacturer}</Text>
