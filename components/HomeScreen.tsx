@@ -73,10 +73,18 @@ function HomeScreen({navigation}:any): JSX.Element {
     }
   };
 
+  function durationToFullyCharge(currentBatteryLevel:any){
+    let remainingPercentage=100-currentBatteryLevel
+    let numerator=remainingPercentage*180
+    let  remainingHours=Math.round(numerator/100)
+    return remainingHours
+  }
+  let duration=durationToFullyCharge(Math.round(batteryLevel))
+  let timeReducePower=180-duration
   return (
     <>
     {/* <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#00BCD4" translucent = {true}/> */}
-    <SafeAreaView style={{backgroundColor:'white'}}>
+    <SafeAreaView style={{backgroundColor:'white',height:1000}}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         >
@@ -93,9 +101,8 @@ function HomeScreen({navigation}:any): JSX.Element {
               source={require("../images/full_battery.png")}
               style={{width: 300, height: 200}}
             />)}
-            {/* <Icon name="battery-0" size={30} color="#900" /> */}
             <Text style={styles.percentage}>{batteryLevel}%</Text>
-            <Text  style={styles.percentageAbout}>About 22m left {manufacturer}</Text>
+            <Text  style={styles.percentageAbout}>About {timeReducePower}m left</Text>
           </View>
         </View>
 
@@ -107,7 +114,7 @@ function HomeScreen({navigation}:any): JSX.Element {
               </View>
               <View style={{flexGrow:1,}}>
                 <Text style={{fontSize:20,fontWeight:'500',color:'black'}}>Battery saver</Text>
-                <Text style={{fontSize:15,}}>22m remaining</Text>
+                <Text style={{fontSize:15,}}>{timeReducePower}m remaining</Text>
               </View>
             </View>
             <Switch
