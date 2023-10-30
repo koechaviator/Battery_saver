@@ -40,7 +40,7 @@ function HomeScreen({navigation}:any): JSX.Element {
     setManufacturer(manufacturer)
   })
   getBatteryLevel().then((battery)=>{
-    setBatteryLevel(battery)
+    setBatteryLevel(Math.round(battery*100))
   })
   getBrightness().then((battery)=>{
     setGetBright(battery)
@@ -88,7 +88,7 @@ function HomeScreen({navigation}:any): JSX.Element {
             />
             {/* <Icon name="battery-0" size={30} color="#900" /> */}
             <Text style={styles.percentage}>{batteryLevel}%</Text>
-            <Text  style={styles.percentageAbout}>About 22m left {manufacturer} {brightness}</Text>
+            <Text  style={styles.percentageAbout}>About 22m left {manufacturer}</Text>
           </View>
         </View>
 
@@ -141,7 +141,7 @@ function HomeScreen({navigation}:any): JSX.Element {
                     <FontAwesome name="times" size={23} color="black"/>
                   </Pressable>
                   <Text style={{color:"black",fontSize:18}}>Brightness</Text>
-                  <Text style={{fontSize:15, marginTop:7}}>{brightness}% {getBright}%</Text>
+                  <Text style={{fontSize:15, marginTop:7}}>{brightness===255?100:brightness}%</Text>
                 </View>
               </View>
             </Modal>

@@ -13,6 +13,14 @@ export default function BatteryInfo() {
   }).catch(()=>{
     console.log("Unable to set system brightness")
   });
+
+  function durationToFullyCharge(currentBatteryLevel:any){
+    let remainingPercentage=100-currentBatteryLevel
+    let numerator=remainingPercentage*180
+    let  remainingHours=Math.round(numerator/100)
+    return remainingHours
+  }
+  let duration=durationToFullyCharge(Math.round(batteryStatus.batteryLevel*100))
   return (
    <SafeAreaView style={{backgroundColor:"white", paddingHorizontal:20, height:1000}}>
     <ScrollView >
@@ -30,7 +38,7 @@ export default function BatteryInfo() {
           <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
             <View style={{flexGrow:1,}}>
               <Text style={{fontSize:18,color:'black'}}>Battery level</Text>
-              <Text style={{fontSize:15,}}>{batteryStatus.batteryLevel}%</Text>
+              <Text style={{fontSize:15,}}>{Math.round(batteryStatus.batteryLevel*100)}%</Text>
             </View>
           </View>
         </View>
@@ -38,8 +46,8 @@ export default function BatteryInfo() {
         <View style={styles.button}>
           <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
             <View style={{flexGrow:1,}}>
-              <Text style={{fontSize:18,color:'black'}}>Duration</Text>
-              <Text style={{fontSize:15,}}>22m</Text>
+              <Text style={{fontSize:18,color:'black'}}>Duration to fully charge</Text>
+              <Text style={{fontSize:15,}}>{duration} minutes</Text>
             </View>
           </View>
         </View>
