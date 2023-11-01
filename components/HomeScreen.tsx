@@ -5,7 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import ScreenBrightness from 'react-native-screen-brightness';
+import DeviceBrightness from '@adrianso/react-native-device-brightness'
 import { getUniqueId, getBrightness, getDisplay, getPowerState, isAirplaneMode, getManufacturer, getBatteryLevel } from 'react-native-device-info';
 import {
   SafeAreaView,
@@ -22,38 +22,39 @@ import {
   Image,
   Switch
 } from 'react-native';
+import Slider from '@react-native-community/slider';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function HomeScreen({navigation}:any): JSX.Element {
-  const [manufacturer,setManufacturer]=useState('')
   const [batteryLevel,setBatteryLevel]=useState(0)
   const [isEnabled, setIsEnabled] = useState(false);
-  const [brightness,setBrightness]=useState()
+  const [brightness,setBrightness]=useState(0)
   const [checkAirplaneMode,setAirplaneMode]=useState(false)
   const [modalVisible, setModalVisible] = useState(false);
   const [getBright,setGetBright]=useState(0)
 
-  getManufacturer().then((manufacturer)=>{
-    setManufacturer(manufacturer)
-  })
   getBatteryLevel().then((battery)=>{
     setBatteryLevel(Math.round(battery*100))
   })
   getBrightness().then((battery)=>{
     setGetBright(battery)
   })
-  // ScreenBrightness.setBrightness(0.5); // between 0 and 1
- 
-  ScreenBrightness.getBrightness().then((brightness:any) => {
-    setBrightness(brightness);
-  }).catch(()=>{
-    Alert.alert("Unable to set system brightness")
-  });
 
-  const checkAirplaneModeFunction=()=>{
+ // Getting brightness
+ const getSystemBrightness=async()=>{
+  try {
+    const systemBrightness:any = await DeviceBrightness.getSystemBrightnessLevel();
+    console.log(systemBrightness);
+    setBrightness(systemBrightness)
+  } catch (error:any) {
+    console.log(error)
+  }
+ }
+
+ const checkAirplaneModeFunction=()=>{
     isAirplaneMode().then((airplane)=>{
       if (!airplane) {
         Alert.alert("Airplane mode is off, turn on to improve your battery life")
@@ -65,14 +66,6 @@ function HomeScreen({navigation}:any): JSX.Element {
     })
   }
 
-  const toggleSwitch = () =>{
-    setIsEnabled(previousState => !previousState);
-    Alert.alert("Successfully turned on battery saver")
-    console.log(isEnabled)
-    if(isEnabled!==true){
-    }
-  };
-
   function durationToFullyCharge(currentBatteryLevel:any){
     let remainingPercentage=100-currentBatteryLevel
     let numerator=remainingPercentage*180
@@ -81,6 +74,7 @@ function HomeScreen({navigation}:any): JSX.Element {
   }
   let duration=durationToFullyCharge(Math.round(batteryLevel))
   let timeReducePower=180-duration
+
   return (
     <>
     {/* <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#00BCD4" translucent = {true}/> */}
@@ -90,16 +84,16 @@ function HomeScreen({navigation}:any): JSX.Element {
         >
         <View style={styles.sectionFirst}>
           <View style={styles.sectionDisplayBattery}>
-            {batteryLevel<40?(
+            {batteryLevel<80?(
               <Image 
               source={require("../images/low_battery.png")}
-              style={{width: 300, height: 200}}
+              style={{width: 300, height: 250}}
             />)
             :
             (
               <Image 
               source={require("../images/full_battery.png")}
-              style={{width: 300, height: 200}}
+              style={{width: 300, height: 250}}
             />)}
             <Text style={styles.percentage}>{batteryLevel}%</Text>
             <Text  style={styles.percentageAbout}>About {timeReducePower}m left</Text>
@@ -118,9 +112,11 @@ function HomeScreen({navigation}:any): JSX.Element {
               </View>
             </View>
             <Switch
-              // trackColor={{false: '#dee2e3', true: '#767577'}}
               thumbColor={isEnabled ? '#55a36c' : '#f4f3f4'}
-              onValueChange = {toggleSwitch}
+              onValueChange = {()=>{
+                setBrightness(0.1)
+                DeviceBrightness.setBrightnessLevel(0.1)
+              }}
               value={isEnabled}
             />
           </TouchableOpacity>
@@ -143,7 +139,7 @@ function HomeScreen({navigation}:any): JSX.Element {
               transparent={true}
               visible={modalVisible}
               onShow={()=>{
-
+                // getSystemBrightness()
               }}
               onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
@@ -155,7 +151,18 @@ function HomeScreen({navigation}:any): JSX.Element {
                     <FontAwesome name="times" size={23} color="black"/>
                   </Pressable>
                   <Text style={{color:"black",fontSize:18}}>Brightness</Text>
-                  <Text style={{fontSize:15, marginTop:7}}>{brightness===255?100:brightness}%</Text>
+                  <Slider
+                    maximumValue={1}
+                    minimumValue={0}
+                    minimumTrackTintColor="#307ecc"
+                    maximumTrackTintColor="#000000"
+                    step={0.1}
+                    value={brightness}
+                    onValueChange={(brightness) => {
+                      setBrightness(brightness);
+                      DeviceBrightness.setBrightnessLevel(brightness);
+                    }}
+                  />
                 </View>
               </View>
             </Modal>
@@ -209,7 +216,6 @@ const styles = StyleSheet.create({
     alignItems:'center',
     marginHorizontal:15,
     flexDirection:'column',
-    // marginVertical:20,
     paddingVertical: 10,
     paddingHorizontal:10,
   },
@@ -232,7 +238,6 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
@@ -240,7 +245,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    // alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

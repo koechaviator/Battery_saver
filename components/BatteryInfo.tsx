@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
-import { getPowerState,  getBrightness, getBatteryLevel } from 'react-native-device-info';
+import { getPowerState,  getBrightness, getBatteryLevel, getManufacturer } from 'react-native-device-info';
 import React, { useState } from 'react'
 
 export default function BatteryInfo() {
@@ -7,13 +7,16 @@ export default function BatteryInfo() {
     batteryState:'',
     batteryLevel:0
   })
+  const [manufacturer,setManufacturer]=useState('')
 
   getPowerState().then((powerState:any) => {
     setBatteryStatus(powerState);
   }).catch(()=>{
     console.log("Unable to set system brightness")
   });
-
+  getManufacturer().then((manufacturer)=>{
+    setManufacturer(manufacturer)
+  })
   function durationToFullyCharge(currentBatteryLevel:any){
     let remainingPercentage=100-currentBatteryLevel
     let numerator=remainingPercentage*180
@@ -48,6 +51,15 @@ export default function BatteryInfo() {
             <View style={{flexGrow:1,}}>
               <Text style={{fontSize:18,color:'black'}}>Duration to fully charge</Text>
               <Text style={{fontSize:15,}}>{duration} minutes</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.button}>
+          <View style={{flex:1, flexGrow:1, flexDirection:'row', alignItems:'center'}}>
+            <View style={{flexGrow:1,}}>
+              <Text style={{fontSize:18,color:'black'}}>Manufacturer</Text>
+              <Text style={{fontSize:15,}}>{manufacturer}</Text>
             </View>
           </View>
         </View>
